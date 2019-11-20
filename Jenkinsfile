@@ -2,6 +2,7 @@ pipeline {
 	environment {
 		registry = "vijay1704/python-repo"
 		registryCredential = 'docker'
+		dockerImage = ''
 	}
 	
 	agent any
@@ -18,6 +19,14 @@ pipeline {
 				}
 			}
 		}
-			
+		stage('Push') {
+			steps{    
+				script {
+					docker.withRegistry( '', registryCredential ) {
+					dockerImage.push()
+					}
+				}
+			}
+		}
 	}
 }
