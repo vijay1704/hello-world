@@ -7,11 +7,6 @@ pipeline {
 	
 	agent any
 	stages {
-		stage('Checkout') {
-			steps {
-				git changelog: false, poll: false, url: 'https://github.com/vijay1704/hello-world.git'
-			}
-		}
 		stage('Build') {
 			steps{
 				script {
@@ -19,13 +14,19 @@ pipeline {
 				}
 			}
 		}
-		stage('Push') {
+		stage('Deploy') {
 			steps{    
 				script {
 					docker.withRegistry( '', registryCredential ) {
 					dockerImage.push()
 					}
 				}
+			}
+		}
+		stage('Run') {
+			steps {
+				sh "docker rmi $registry:$BUILD_NUMBER"
+				sh label: '', script: 'docker run -p 5000:5000 vijay1704/python-repo:${BUILD_NUMBER}'
 			}
 		}
 	}
