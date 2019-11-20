@@ -7,7 +7,9 @@ pipeline {
 	agent any
 	stages {
 		stage('Checkout') {
-			git changelog: false, poll: false, url: 'https://github.com/vijay1704/hello-world.git'
+			steps {
+				git changelog: false, poll: false, url: 'https://github.com/vijay1704/hello-world.git'
+			}
 		}
 		stage('Build') {
 			steps{
